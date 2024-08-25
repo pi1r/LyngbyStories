@@ -20,3 +20,4 @@ D:\c#\Мои игры\MoveGame\MoveGame\obj\Release\net8.0-windows\MoveGame.pdb
 D:\c#\Мои игры\MoveGame\MoveGame\obj\Release\net8.0-windows\MoveGame.genruntimeconfig.cache
 D:\c#\Мои игры\MoveGame\MoveGame\obj\Release\net8.0-windows\ref\MoveGame.dll
 D:\c#\Мои игры\MoveGame\MoveGame\obj\Release\net8.0-windows\MoveGame_Content.g.cs
+D:\c#\Мои игры\MoveGame\MoveGame\obj\Release\net8.0-windows\MoveGame.sourcelink.json

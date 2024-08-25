@@ -9,7 +9,7 @@ namespace MoveGame
         public double Speed { get; set; }
         public double DirectionX { get; set; }
         public double DirectionY { get; set; }
-        public int Damage { get; set; } // Убедитесь, что это свойство существует
+        public int Damage { get; set; } 
 
 
         public Projectile(double x, double y, double speed, double directionX, double directionY, int damage)

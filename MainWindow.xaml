@@ -3,53 +3,95 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Height="500" Width="1000"
         KeyDown="Window_KeyDown" ResizeMode="NoResize" Title="Lyngby Storie">
 
+    <Window.Resources>
+        <!-- Стиль для отключения эффектов наведения на кнопки -->
+        <Style x:Key="NoHoverEffectButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource {x:Static SystemColors.ControlBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="Cursor" Value="Arrow"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Canvas x:Name="GameBorder" Margin="0,59,732,0">
         <!-- Зона Героя -->
         <Canvas.Background>
             <ImageBrush ImageSource="D:\c#\Мои игры\MoveGame\MoveGame\textures\ZoneHero2.png" Stretch="Fill"/>
         </Canvas.Background>
-        <Button x:Name="WallButton" Canvas.Left="250" HorizontalAlignment="Left" Height="425" VerticalAlignment="Center" Width="30"/>
 
+        <!-- Стена -->
+        <Button x:Name="WallButton" Canvas.Left="250" HorizontalAlignment="Left" Height="425" VerticalAlignment="Center" Width="30" 
+                Style="{StaticResource NoHoverEffectButtonStyle}">
+            <Button.Background>
+                <ImageBrush ImageSource="D:\c#\Мои игры\MoveGame\MoveGame\textures\wall.png" Stretch="Fill"/>
+            </Button.Background>
+        </Button>
 
         <!-- Первая зона для снарядов -->
-        <Canvas x:Name="BombZone"  Height="50" Width="43" Canvas.Left="207" Canvas.Top="273" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Canvas x:Name="BombZone" Height="50" Width="43" Canvas.Left="207" Canvas.Top="273" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Canvas.Background>
                 <ImageBrush ImageSource="D:\c#\Мои игры\MoveGame\MoveGame\textures\boom.png" Stretch="Fill"/>
             </Canvas.Background>
         </Canvas>
 
         <!-- Вторая зона для снарядов -->
-        <Canvas x:Name="BombZone2"  Height="50" Width="43" Canvas.Left="207" Canvas.Top="83" HorizontalAlignment="Center" VerticalAlignment="Top">
+        <Canvas x:Name="BombZone2" Height="50" Width="43" Canvas.Left="207" Canvas.Top="83" HorizontalAlignment="Center" VerticalAlignment="Top">
             <Canvas.Background>
                 <ImageBrush ImageSource="D:\c#\Мои игры\MoveGame\MoveGame\textures\boom.png" Stretch="Fill"/>
             </Canvas.Background>
         </Canvas>
 
         <!-- Третья зона для снарядов -->
-        <Canvas x:Name="BombZone3"  Height="50" Width="43" Canvas.Left="207" Canvas.Top="174" HorizontalAlignment="Center" VerticalAlignment="Top">
+        <Canvas x:Name="BombZone3" Height="50" Width="43" Canvas.Left="207" Canvas.Top="174" HorizontalAlignment="Center" VerticalAlignment="Top">
             <Canvas.Background>
                 <ImageBrush ImageSource="D:\c#\Мои игры\MoveGame\MoveGame\textures\boom.png" Stretch="Fill"/>
             </Canvas.Background>
         </Canvas>
 
-        <Button x:Name="Hero" Height="20" Width="18" Canvas.Left="194" Canvas.Top="263">
+        <!-- Герой -->
+        <Button x:Name="Hero" Height="20" Width="18" Canvas.Left="194" Canvas.Top="263" 
+                Style="{StaticResource NoHoverEffectButtonStyle}">
             <Button.Background>
                 <ImageBrush ImageSource="D:\c#\Мои игры\MoveGame\MoveGame\textures\hero.png" Stretch="Fill"/>
             </Button.Background>
         </Button>
+
+        <!-- Зона меню -->
         <Canvas Height="60" Width="1000" HorizontalAlignment="Left" Canvas.Top="-60" VerticalAlignment="Center">
             <Canvas.Background>
                 <ImageBrush ImageSource="D:\c#\Мои игры\MoveGame\MoveGame\textures\MenuZone1.png" Stretch="Fill"/>
             </Canvas.Background>
         </Canvas>
+
+        <!-- Зона врагов -->
         <Canvas x:Name="EnemySpace" Height="426" Width="720" HorizontalAlignment="Left" Canvas.Left="280" VerticalAlignment="Top">
             <Canvas.Background>
                 <ImageBrush ImageSource="D:\c#\Мои игры\MoveGame\MoveGame\textures\EnemyZone1.png" Stretch="Fill"/>
             </Canvas.Background>
-            <TextBlock x:Name="TowerHealthText" Text="Health:" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="-244" Canvas.Top="-43" FontSize="18" FontWeight="Bold" FontFamily="Segoe Script" />
+
+            <!-- Текст здоровья башни -->
+            <TextBlock x:Name="TowerHealthText" Text="Health:" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                       Canvas.Left="-244" Canvas.Top="-43" FontSize="18" FontWeight="Bold" FontFamily="Segoe Script" />
+
+            <!-- Текст опыта -->
             <TextBlock Name="ExpPointsText" Text="Experience: 0" FontSize="16" FontWeight="Bold"
-            HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="-65" Canvas.Top="-43" FontFamily="Segoe Script"/>
+                       HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="-65" Canvas.Top="-43" FontFamily="Segoe Script"/>
+            <!--Текст уровня-->
+            <TextBlock Name="LevelText" Text="Level: 0" FontSize="16" FontWeight="Bold"
+             HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="584" Canvas.Top="-43" FontFamily="Segoe Script"/>
         </Canvas>
     </Canvas>
-
 </Window>
+

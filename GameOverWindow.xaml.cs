@@ -12,13 +12,13 @@ namespace MoveGame
 
         private void PlayAgain_Click(object sender, RoutedEventArgs e)
         {
-            // Закрываем текущее окно
+            // закрываем текущее окно
             this.Close();
 
-            // Перезапускаем приложение
+            // перезапускаем приложение
             System.Diagnostics.Process.Start(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
 
-            // Завершаем текущее приложение
+            // завершаем текущее приложение
             Application.Current.Shutdown();
         }
 

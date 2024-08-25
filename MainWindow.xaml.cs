@@ -22,8 +22,9 @@ namespace MoveGame
         private bool _inBombZone1;
         private bool _inBombZone2;
         private bool _inBombZone3;
-        private List<Image> _enemies;
+        private List<Button> _enemies;
         private int _expPoints;
+        private int _level;
 
         public MainWindow()
         {
@@ -31,14 +32,18 @@ namespace MoveGame
             this.Focusable = true;
             this.Focus();
 
-            _hero = new Hero(100, 100, speed: 20);
-            _tower = new Tower(health: 100, 1, 10); // Устанавливаем начальное здоровье башни
+            _hero = new Hero(100, 100, speed: 10);
+            _tower = new Tower(health: 100, 1, 10);
 
-            _enemies = new List<Image>();
+            _enemies = new List<Button>();
             _expPoints = 0;
+            _level = 1;  // Начальный уровень
 
             Canvas.SetLeft(Hero, _hero.X);
             Canvas.SetTop(Hero, _hero.Y);
+
+            // Применяем стиль для отключения эффектов наведения к герою
+            Hero.Style = (Style)FindResource("NoHoverEffectButtonStyle");
 
             _projectileTimer1 = new DispatcherTimer
             {
@@ -67,6 +72,7 @@ namespace MoveGame
 
             UpdateTowerHealthText();
             UpdateExpText();
+            UpdateLevelText();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -203,6 +209,9 @@ namespace MoveGame
             Random rand = new Random();
             int zoneIndex = rand.Next(1, 4);
 
+            // Добавляем вероятность появления TankEnemy
+            bool isTankEnemy = _level >= 2 && rand.Next(0, 5) == 0; // 20% шанс появления TankEnemy
+
             double enemyY = 0;
             switch (zoneIndex)
             {
@@ -211,26 +220,23 @@ namespace MoveGame
                 case 3: enemyY = Canvas.GetTop(BombZone3) + BombZone.Height / 2; break;
             }
 
-            Image enemyImage = new Image
+            Button enemyButton = new Button
             {
-                Width = 40,
-                Height = 40,
-                Source = new BitmapImage(new Uri("D:\\c#\\Мои игры\\MoveGame\\MoveGame\\textures\\enemy.png")) // Путь к изображению
+                Width = 20,
+                Height = 20,
+                Background = new ImageBrush(new BitmapImage(new Uri(GetEnemyTexture(isTankEnemy)))),
+                Style = (Style)this.Resources["NoHoverEffectButtonStyle"]
             };
 
-            Enemy enemyData = new Enemy
-            {
-                Health = 100,
-                Speed = 2
-            };
+            Enemy enemyData = isTankEnemy ? new TankEnemy() : new Enemy(100, 2, 20);
 
-            enemyImage.Tag = enemyData;
+            enemyButton.Tag = enemyData;
 
-            Canvas.SetLeft(enemyImage, EnemySpace.Width - enemyImage.Width);
-            Canvas.SetTop(enemyImage, enemyY - enemyImage.Height / 2);
+            Canvas.SetLeft(enemyButton, EnemySpace.Width - enemyButton.Width);
+            Canvas.SetTop(enemyButton, enemyY - enemyButton.Height / 2);
 
-            EnemySpace.Children.Add(enemyImage);
-            _enemies.Add(enemyImage);
+            EnemySpace.Children.Add(enemyButton);
+            _enemies.Add(enemyButton);
 
             DispatcherTimer moveTimer = new DispatcherTimer
             {
@@ -238,18 +244,18 @@ namespace MoveGame
             };
             moveTimer.Tick += (s, ev) =>
             {
-                if (!_enemies.Contains(enemyImage))
+                if (!_enemies.Contains(enemyButton))
                 {
                     moveTimer.Stop();
                     return;
                 }
 
-                double currentX = Canvas.GetLeft(enemyImage);
+                double currentX = Canvas.GetLeft(enemyButton);
                 if (currentX <= 0)
                 {
                     moveTimer.Stop();
-                    EnemySpace.Children.Remove(enemyImage);
-                    _enemies.Remove(enemyImage);
+                    EnemySpace.Children.Remove(enemyButton);
+                    _enemies.Remove(enemyButton);
 
                     _tower.Health -= 20;
                     UpdateTowerHealthText();
@@ -267,81 +273,85 @@ namespace MoveGame
                 }
                 else
                 {
-                    Canvas.SetLeft(enemyImage, currentX - enemyData.Speed);
+                    Canvas.SetLeft(enemyButton, currentX - ((Enemy)enemyButton.Tag).Speed);
                 }
             };
             moveTimer.Start();
         }
 
-        private void StopGame()
-        {
-            _projectileTimer1.Stop();
-            _projectileTimer2.Stop();
-            _projectileTimer3.Stop();
-            _enemySpawnTimer.Stop();
 
-            ClearEnemiesAndProjectiles();
+        private string GetEnemyTexture(bool isTankEnemy)
+        {
+            if (_level >= 2 && isTankEnemy)
+            {
+                return "D:\\c#\\Мои игры\\MoveGame\\MoveGame\\textures\\enemyTank.png";
+            }
+            return "D:\\c#\\Мои игры\\MoveGame\\MoveGame\\textures\\enemy.png";
+
         }
 
         private void CheckProjectileCollisionWithEnemies(Rectangle projectile, Projectile projectileData, DispatcherTimer moveTimer)
         {
-            List<Image> enemiesToRemove = new List<Image>();
-
-            foreach (var enemyImage in _enemies.ToList())
+            foreach (Button enemyButton in _enemies.ToList())
             {
-                double enemyX = Canvas.GetLeft(enemyImage);
-                double enemyY = Canvas.GetTop(enemyImage);
+                double projectileLeft = Canvas.GetLeft(projectile);
+                double projectileTop = Canvas.GetTop(projectile);
 
-                if (projectileData.X < enemyX + enemyImage.Width &&
-                    projectileData.X + projectile.Width > enemyX &&
-                    projectileData.Y < enemyY + enemyImage.Height &&
-                    projectileData.Y + projectile.Height > enemyY)
+                double enemyLeft = Canvas.GetLeft(enemyButton);
+                double enemyTop = Canvas.GetTop(enemyButton);
+
+                if (projectileLeft < enemyLeft + enemyButton.Width &&
+                    projectileLeft + projectile.Width > enemyLeft &&
+                    projectileTop < enemyTop + enemyButton.Height &&
+                    projectileTop + projectile.Height > enemyTop)
                 {
-                    moveTimer.Stop();
-                    EnemySpace.Children.Remove(projectile);
+                    Enemy enemyData = (Enemy)enemyButton.Tag;
+                    enemyData.Health -= projectileData.Damage;
 
-                    Enemy enemy = (Enemy)enemyImage.Tag;
-                    enemy.Health -= projectileData.Damage;
-
-                    if (enemy.Health <= 0)
+                    if (enemyData.Health <= 0)
                     {
-                        EnemySpace.Children.Remove(enemyImage);
-                        _enemies.Remove(enemyImage);
-                        _expPoints += 10; // Добавляем очки за уничтожение врага
+                        _expPoints += 20;
                         UpdateExpText();
+
+                        // Проверяем, увеличилось ли количество опыта до следующего уровня
+                        if (_expPoints >= _level * 100)
+                        {
+                            _level += 1;
+                            UpdateLevelText();
+                        }
+
+                        EnemySpace.Children.Remove(enemyButton);
+                        _enemies.Remove(enemyButton);
                     }
+
+                    EnemySpace.Children.Remove(projectile);
+                    moveTimer.Stop();
+                    return;
                 }
             }
-        }
-
-        private void ClearEnemiesAndProjectiles()
-        {
-            List<UIElement> elementsToRemove = new List<UIElement>();
-
-            foreach (var element in EnemySpace.Children)
-            {
-                if (element is Image || element is Rectangle)
-                {
-                    elementsToRemove.Add((UIElement)element);
-                }
-            }
-
-            foreach (var element in elementsToRemove)
-            {
-                EnemySpace.Children.Remove(element);
-            }
-
-            _enemies.Clear();
-        }
-
-        private void UpdateExpText()
-        {
-            ExpPointsText.Text = $"Experience: {_expPoints}";
         }
 
         private void UpdateTowerHealthText()
         {
             TowerHealthText.Text = $"Health: {_tower.Health}";
+        }
+
+        private void UpdateLevelText()
+        {
+            LevelText.Text = $"Level : {_level}";
+        }
+
+        private void UpdateExpText()
+        {
+            ExpPointsText.Text = $"Exp: {_expPoints}";
+        }
+
+        private void StopGame()
+        {
+            _enemySpawnTimer.Stop();
+            _projectileTimer1.Stop();
+            _projectileTimer2.Stop();
+            _projectileTimer3.Stop();
         }
     }
 }
