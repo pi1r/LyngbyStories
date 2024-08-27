@@ -10,11 +10,11 @@ none
 false
 TRACE;RELEASE;NET;NET8_0;NETCOREAPP
 D:\c#\Мои игры\MoveGame\MoveGame\App.xaml
-2-1613657610
+4-1873570203
 1-1611241682
-9-155922991
+11636707784
 198-1509178875
-GameOverWindow.xaml;MainWindow.xaml;
+About.xaml;GameOverWindow.xaml;MainWindow.xaml;StartMenu.xaml;
 
 False
 

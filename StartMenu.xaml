@@ -1,0 +1,21 @@
+﻿<Window x:Class="MoveGame.StartMenu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MoveGame"
+        mc:Ignorable="d"
+        Title="StartMenu" Height="500" Width="1000">
+    <Grid>
+        <Canvas>
+            <Canvas.Background>
+                <ImageBrush ImageSource="D:\c#\Мои игры\MoveGame\MoveGame\textures\about.png" Stretch="Fill"/>
+            </Canvas.Background>
+        </Canvas>
+        <Button Content="Start" HorizontalAlignment="Center" Margin="0,203,0,0" VerticalAlignment="Top" Height="39" Width="180" Click="StartButton_Click" FontFamily="Segoe Script" FontSize="20"/>
+        <Button Content="About" HorizontalAlignment="Center" Margin="0,275,0,0" VerticalAlignment="Top" Height="39" Width="180" Click="AboutButton_Click" FontFamily="Segoe Script" FontSize="20"/>
+        <Button Content="Quit" HorizontalAlignment="Center" Margin="0,342,0,0" VerticalAlignment="Top" Height="39" Width="180" Click="QuitButton_Click" FontFamily="Segoe Script" FontSize="20"/>
+        <TextBlock HorizontalAlignment="Center" Margin="0,119,0,0" TextWrapping="Wrap" Text="Lyngby Stories" VerticalAlignment="Top" FontFamily="Segoe Script" FontSize="30"/>
+        <TextBlock HorizontalAlignment="Left" Margin="668,203,0,0" TextWrapping="Wrap" Text="Best Result:" VerticalAlignment="Top" FontFamily="Segoe Script" FontSize="16"/>
+    </Grid>
+</Window>

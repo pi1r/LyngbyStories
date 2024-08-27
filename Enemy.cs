@@ -30,11 +30,14 @@ namespace MoveGame
         }
     }
 
-    public class FastEnemy : Enemy
-    {
-        public FastEnemy () : base(health: 100, 2, 20)
-        {
 
+    public class FastEnemy: Enemy
+    {
+        public FastEnemy() : base(health: 100, speed: 4, damage: 20)
+        {
+            {
+
+            }
         }
     }
 }

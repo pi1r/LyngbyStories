@@ -92,6 +92,7 @@
             <TextBlock Name="LevelText" Text="Level: 0" FontSize="16" FontWeight="Bold"
              HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="584" Canvas.Top="-43" FontFamily="Segoe Script"/>
         </Canvas>
+        <Button Content="Menu" Canvas.Left="30" Canvas.Top="359" Height="26" Width="81" FontFamily="Segoe Script" Click="BackToMenu_Click"/>
     </Canvas>
 </Window>
 

@@ -42,3 +42,8 @@ D:\c#\Мои игры\MoveGame\MoveGame\obj\Debug\net8.0-windows\MoveGame.genrun
 D:\c#\Мои игры\MoveGame\MoveGame\obj\Debug\net8.0-windows\ref\MoveGame.dll
 D:\c#\Мои игры\MoveGame\MoveGame\obj\Debug\net8.0-windows\MoveGame_Content.g.cs
 D:\c#\Мои игры\MoveGame\MoveGame\obj\Debug\net8.0-windows\MoveGame.sourcelink.json
+D:\c#\Мои игры\MoveGame\MoveGame\obj\Debug\net8.0-windows\StartMenu.g.cs
+D:\c#\Мои игры\MoveGame\MoveGame\obj\Debug\net8.0-windows\MoveGame_MarkupCompile.lref
+D:\c#\Мои игры\MoveGame\MoveGame\obj\Debug\net8.0-windows\StartMenu.baml
+D:\c#\Мои игры\MoveGame\MoveGame\obj\Debug\net8.0-windows\About.g.cs
+D:\c#\Мои игры\MoveGame\MoveGame\obj\Debug\net8.0-windows\About.baml

@@ -209,8 +209,9 @@ namespace MoveGame
             Random rand = new Random();
             int zoneIndex = rand.Next(1, 4);
 
-            // Добавляем вероятность появления TankEnemy
-            bool isTankEnemy = _level >= 2 && rand.Next(0, 5) == 0; // 20% шанс появления TankEnemy
+            // Вероятности появления разных врагов
+            bool isTankEnemy = _level >= 3 && rand.Next(0, 5) == 0; // 20% шанс появления TankEnemy на 3+ уровне
+            bool isFastEnemy = _level >= 2 && rand.Next(0, 4) == 0; // 25% шанс появления FastEnemy на 2+ уровне
 
             double enemyY = 0;
             switch (zoneIndex)
@@ -224,11 +225,23 @@ namespace MoveGame
             {
                 Width = 20,
                 Height = 20,
-                Background = new ImageBrush(new BitmapImage(new Uri(GetEnemyTexture(isTankEnemy)))),
+                Background = new ImageBrush(new BitmapImage(new Uri(GetEnemyTexture(isTankEnemy, isFastEnemy)))),
                 Style = (Style)this.Resources["NoHoverEffectButtonStyle"]
             };
 
-            Enemy enemyData = isTankEnemy ? new TankEnemy() : new Enemy(100, 2, 20);
+            Enemy enemyData;
+            if (isTankEnemy)
+            {
+                enemyData = new TankEnemy(); // Медленный, но с большим здоровьем
+            }
+            else if (isFastEnemy)
+            {
+                enemyData = new FastEnemy(); // Быстрый, но с низким здоровьем
+            }
+            else
+            {
+                enemyData = new Enemy(100, 2, 20); // Обычный враг
+            }
 
             enemyButton.Tag = enemyData;
 
@@ -273,14 +286,13 @@ namespace MoveGame
                 }
                 else
                 {
-                    Canvas.SetLeft(enemyButton, currentX - ((Enemy)enemyButton.Tag).Speed);
+                    Canvas.SetLeft(enemyButton, currentX - enemyData.Speed);
                 }
             };
             moveTimer.Start();
         }
 
-
-        private string GetEnemyTexture(bool isTankEnemy)
+        private string GetEnemyTexture(bool isTankEnemy, bool isFastEnemy)
         {
             if (_level >= 2 && isTankEnemy)
             {
@@ -352,6 +364,14 @@ namespace MoveGame
             _projectileTimer1.Stop();
             _projectileTimer2.Stop();
             _projectileTimer3.Stop();
+        }
+
+        private void BackToMenu_Click(object sender, EventArgs e)
+        {
+            StartMenu startMenu = new StartMenu();
+            startMenu.Show();
+            StopGame();
+            this.Close(); 
         }
     }
 }
