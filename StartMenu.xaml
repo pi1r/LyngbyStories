@@ -16,6 +16,6 @@
         <Button Content="About" HorizontalAlignment="Center" Margin="0,275,0,0" VerticalAlignment="Top" Height="39" Width="180" Click="AboutButton_Click" FontFamily="Segoe Script" FontSize="20"/>
         <Button Content="Quit" HorizontalAlignment="Center" Margin="0,342,0,0" VerticalAlignment="Top" Height="39" Width="180" Click="QuitButton_Click" FontFamily="Segoe Script" FontSize="20"/>
         <TextBlock HorizontalAlignment="Center" Margin="0,119,0,0" TextWrapping="Wrap" Text="Lyngby Stories" VerticalAlignment="Top" FontFamily="Segoe Script" FontSize="30"/>
-        <TextBlock HorizontalAlignment="Left" Margin="668,203,0,0" TextWrapping="Wrap" Text="Best Result:" VerticalAlignment="Top" FontFamily="Segoe Script" FontSize="16"/>
+        <TextBlock Name="BestScoreText" HorizontalAlignment="Left" Margin="668,203,0,0" TextWrapping="Wrap" Text="Best Result: 0" VerticalAlignment="Top" FontFamily="Segoe Script" FontSize="16"/>
     </Grid>
 </Window>

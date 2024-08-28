@@ -27,13 +27,16 @@ namespace MoveGame
         private int _level;
 
         public MainWindow()
+
         {
+
             InitializeComponent();
+            DatabaseHelper.CreateDatabase();
             this.Focusable = true;
             this.Focus();
 
             _hero = new Hero(100, 100, speed: 10);
-            _tower = new Tower(health: 100, 1, 10);
+            _tower = new Tower(health: 100, gunsNumbers: 1, damage: 10);
 
             _enemies = new List<Button>();
             _expPoints = 0;
@@ -73,6 +76,9 @@ namespace MoveGame
             UpdateTowerHealthText();
             UpdateExpText();
             UpdateLevelText();
+
+            // Создание базы данных и таблицы, если они не существуют
+            DatabaseHelper.CreateDatabase();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -172,8 +178,8 @@ namespace MoveGame
                 startX,
                 startY,
                 speed: 5,
-                1,
-                0,
+                directionX: 1,
+                directionY: 0,
                 damage: 100
             );
 
@@ -292,14 +298,15 @@ namespace MoveGame
             moveTimer.Start();
         }
 
+
         private string GetEnemyTexture(bool isTankEnemy, bool isFastEnemy)
         {
-            if (_level >= 2 && isTankEnemy)
-            {
-                return "D:\\c#\\Мои игры\\MoveGame\\MoveGame\\textures\\enemyTank.png";
-            }
-            return "D:\\c#\\Мои игры\\MoveGame\\MoveGame\\textures\\enemy.png";
+            if (isTankEnemy)
+                return "D:\\c#\\Мои игры\\MoveGame\\MoveGame\\textures\\enemyTank.png"; 
+            if (isFastEnemy)
+                return "D:\\c#\\Мои игры\\MoveGame\\MoveGame\\textures\\enemyFast.png"; // Пример пути для быстрого врага
 
+            return "D:\\c#\\Мои игры\\MoveGame\\MoveGame\\textures\\enemy.png"; // Пример пути для обычного врага
         }
 
         private void CheckProjectileCollisionWithEnemies(Rectangle projectile, Projectile projectileData, DispatcherTimer moveTimer)
@@ -325,17 +332,19 @@ namespace MoveGame
                         _expPoints += 20;
                         UpdateExpText();
 
-                        // Проверяем, увеличилось ли количество опыта до следующего уровня
+                        // Проверка на уровень
                         if (_expPoints >= _level * 100)
                         {
-                            _level += 1;
+                            _level++;
                             UpdateLevelText();
                         }
 
+                        // Удаление врага
                         EnemySpace.Children.Remove(enemyButton);
                         _enemies.Remove(enemyButton);
                     }
 
+                    // Удаление снаряда
                     EnemySpace.Children.Remove(projectile);
                     moveTimer.Stop();
                     return;
@@ -343,35 +352,67 @@ namespace MoveGame
             }
         }
 
-        private void UpdateTowerHealthText()
+        private void BackToMenu_Click(object sender, RoutedEventArgs e)
         {
-            TowerHealthText.Text = $"Health: {_tower.Health}";
+            StopGame();
+            this.Close();
+            StartMenu startMenu = new StartMenu();
+            startMenu.Show();
         }
 
-        private void UpdateLevelText()
-        {
-            LevelText.Text = $"Level : {_level}";
-        }
 
-        private void UpdateExpText()
-        {
-            ExpPointsText.Text = $"Exp: {_expPoints}";
-        }
-
-        private void StopGame()
+        public void StopGame()
         {
             _enemySpawnTimer.Stop();
             _projectileTimer1.Stop();
             _projectileTimer2.Stop();
             _projectileTimer3.Stop();
+
+
+            EndGame();
+
         }
 
-        private void BackToMenu_Click(object sender, EventArgs e)
+        private void UpdateTowerHealthText()
         {
-            StartMenu startMenu = new StartMenu();
-            startMenu.Show();
-            StopGame();
-            this.Close(); 
+            TowerHealthText.Text = $"Health: {_tower.Health}";
         }
+
+        private void UpdateExpText()
+        {
+            ExpPointsText.Text = $"EXP Points: {_expPoints}";
+        }
+
+        public void UpdateBestScoreText()
+        {
+            int highScore = DatabaseHelper.GetHighScore();
+            StartMenu startMenu = new StartMenu();
+            startMenu.BestScoreText.Text = $"Best Score: {highScore}";
+        }
+
+
+        private void LevelUp()
+        {
+            _level++;
+            UpdateLevelText();
+        }
+        private void EndGame()
+        {
+            // Сохранение нового рекорда
+            DatabaseHelper.SaveHighScore("Player1", _expPoints);
+
+            // Обновление лучшего результата
+            StartMenu startMenu = new StartMenu();
+            startMenu.UpdateBestScoreText();
+            this.Close();
+        }
+
+        private void UpdateLevelText()
+        {
+            LevelText.Text = $"Level: {_level}";
+        }
+
+
+
     }
 }

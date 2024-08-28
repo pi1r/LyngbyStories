@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MoveGame")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+42780896928cadfa116889994bc6f8d2760dc4b8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+849e89a79d1cef19b64dadf48d42460dbc5598db")]
 [assembly: System.Reflection.AssemblyProductAttribute("MoveGame")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MoveGame")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
