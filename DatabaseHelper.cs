@@ -11,20 +11,30 @@ namespace MoveGame
         {
             using (var connection = new SQLiteConnection(ConnectionString))
             {
-                connection.Open();
-                string createTableQuery = @"
-                    CREATE TABLE IF NOT EXISTS HighScores (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        PlayerName TEXT NOT NULL,
-                        Score INTEGER NOT NULL
-                    );";
-
-                using (var command = new SQLiteCommand(createTableQuery, connection))
+                try
                 {
-                    command.ExecuteNonQuery();
+                    connection.Open();
+                    string createTableQuery = @"
+                CREATE TABLE IF NOT EXISTS HighScores (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    PlayerName TEXT NOT NULL,
+                    Score INTEGER NOT NULL
+                );";
+
+                    using (var command = new SQLiteCommand(createTableQuery, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    Console.WriteLine("Database and table created successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error creating database or table: " + ex.Message);
                 }
             }
         }
+
+
 
         public static void SaveHighScore(string playerName, int score)
         {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
 using System.Data.SQLite;
+using System.IO;
+
 
 namespace MoveGame
 {
@@ -8,8 +10,12 @@ namespace MoveGame
     {
         public StartMenu()
         {
+            string dbPath = "HighScores.db";
             InitializeComponent();
+            DatabaseHelper.CreateDatabase();
+            //MessageBox.Show($"Database Path: {Path.GetFullPath(dbPath)}");
             UpdateBestScoreText(); // Обновляем текст при инициализации окна
+
         }
 
         // Метод для обновления текста с лучшим результатом

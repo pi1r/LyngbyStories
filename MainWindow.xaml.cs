@@ -31,9 +31,9 @@ namespace MoveGame
         {
 
             InitializeComponent();
-            DatabaseHelper.CreateDatabase();
             this.Focusable = true;
             this.Focus();
+
 
             _hero = new Hero(100, 100, speed: 10);
             _tower = new Tower(health: 100, gunsNumbers: 1, damage: 10);
